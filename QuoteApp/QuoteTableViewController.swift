@@ -87,7 +87,15 @@ class QuoteTableViewController: UITableViewController, SKPaymentTransactionObser
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        
+        for transaction in transactions {
+            if transaction.transactionState == .purchased {
+                //User payment successful
+                print("Payment successful!")
+            } else if transaction.transactionState == .failed {
+                //Payment failed
+                print("Payment failed!")
+            }
+        }
     }
     
     
