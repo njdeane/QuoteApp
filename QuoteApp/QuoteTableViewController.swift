@@ -6,8 +6,12 @@
 //
 
 import UIKit
+import StoreKit
 
-class QuoteTableViewController: UITableViewController {
+class QuoteTableViewController: UITableViewController, SKPaymentTransactionObserver {
+    
+
+    let productID = "This is the product ID from the paid section of the app in app store connect"
     
     var quotesToShow = [
         "Our greatest glory is not in never falling, but in rising every time we fall. — Confucius",
@@ -29,6 +33,7 @@ class QuoteTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        SKPaymentQueue.default().add(self)
     }
     
     // MARK: - Table view data source
@@ -70,8 +75,22 @@ class QuoteTableViewController: UITableViewController {
     //MARK: - In-App Purchase Methods
     
     func buyPremiumQuotes() {
+        if SKPaymentQueue.canMakePayments() {
+            //Then can make payments
+            let paymentRequest = SKMutablePayment()
+            paymentRequest.productIdentifier = productID
+            SKPaymentQueue.default().add(paymentRequest)
+        } else {
+            //cannot make payments ie: parental control enabled on phone
+            print("User cannot make payments")
+        }
+    }
+    
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         
     }
+    
+    
     
     @IBAction func restorePressed(_ sender: UIBarButtonItem) {
     }
